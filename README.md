@@ -1,7 +1,7 @@
 # Creatorverse
 
 Submitted by: Mitch
-Time spent: X hours
+Time spent: 6 hours
 
 ## Summary
 Creatorverse is a React + Vite single-page app that showcases inspiring digital creators. It connects directly to Supabase for real-time CRUD operations and seeds the database with example creators when empty. Each creator appears as a responsive card with shortcuts to view, edit, or delete their profile.
