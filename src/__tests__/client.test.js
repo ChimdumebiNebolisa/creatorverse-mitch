@@ -1,4 +1,5 @@
-import { afterEach, describe, expect, it, vi } from 'vitest';
+import process from 'node:process';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 vi.mock('@supabase/supabase-js', () => {
   return {
@@ -6,19 +7,27 @@ vi.mock('@supabase/supabase-js', () => {
   };
 });
 
+const ORIGINAL_ENV = { ...process.env };
+
+beforeEach(() => {
+  vi.resetModules();
+  process.env = { ...ORIGINAL_ENV };
+});
+
 afterEach(() => {
   vi.clearAllMocks();
+  process.env = ORIGINAL_ENV;
 });
 
 describe('supabase client', () => {
   it('creates a client using project credentials', async () => {
-    const { createClient } = await import('@supabase/supabase-js');
-    const { supabase } = await import('../client.js');
+    process.env.VITE_SUPABASE_URL = 'https://example.supabase.co';
+    process.env.VITE_SUPABASE_API_KEY = 'test-api-key';
 
-    expect(createClient).toHaveBeenCalledWith(
-      'https://yvmcpmjvgeqthwfwobmx.supabase.co',
-      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2bWNwbWp2Z2VxdGh3ZndvYm14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5Nzc5NjAsImV4cCI6MjA3ODU1Mzk2MH0.DbcP7DoNWo4zcHNPJ_iKEko-GGwqmfUH-aEpYCxWE3k'
-    );
+    const { supabase } = await import('../client.js');
+    const { createClient } = await import('@supabase/supabase-js');
+
+    expect(createClient).toHaveBeenCalledWith('https://example.supabase.co', 'test-api-key');
     expect(supabase).toEqual({ mocked: true });
   });
 });

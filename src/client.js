@@ -1,7 +1,27 @@
 import { createClient } from '@supabase/supabase-js';
 
-const URL = 'https://yvmcpmjvgeqthwfwobmx.supabase.co';
-const API_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl2bWNwbWp2Z2VxdGh3ZndvYm14Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjI5Nzc5NjAsImV4cCI6MjA3ODU1Mzk2MH0.DbcP7DoNWo4zcHNPJ_iKEko-GGwqmfUH-aEpYCxWE3k';
+const globalProcess = typeof globalThis !== 'undefined' ? globalThis.process : undefined;
 
-export const supabase = createClient(URL, API_KEY);
+function readEnv(key) {
+  if (typeof import.meta !== 'undefined' && import.meta.env && key in import.meta.env) {
+    return import.meta.env[key];
+  }
+
+  if (globalProcess?.env && key in globalProcess.env) {
+    return globalProcess.env[key];
+  }
+
+  return undefined;
+}
+
+const URL = readEnv('VITE_SUPABASE_URL');
+const API_KEY = readEnv('VITE_SUPABASE_API_KEY');
+
+if (!URL || !API_KEY) {
+  console.warn(
+    'Supabase client is missing configuration. Ensure VITE_SUPABASE_URL and VITE_SUPABASE_API_KEY are set.'
+  );
+}
+
+export const supabase = createClient(URL ?? '', API_KEY ?? '');
 
