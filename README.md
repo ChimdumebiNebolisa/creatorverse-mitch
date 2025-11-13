@@ -30,7 +30,7 @@ Creatorverse is a React + Vite single-page app that showcases inspiring digital 
 - [ ] Dark mode theme toggle.
 
 ## Video Walkthrough
-Embed your walkthrough GIF or link here once recorded.
+[![Creatorverse walkthrough screenshot](Screenshot%202025-11-12%20190825.png)](./demo-walkthrough.mp4)
 
 ## Development
 - `npm install`
