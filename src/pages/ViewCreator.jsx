@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../client.js';
+import { formatSupabaseError } from '../utils/formatSupabaseError.js';
 
 const ViewCreator = () => {
   const { id } = useParams();
@@ -32,7 +33,12 @@ const ViewCreator = () => {
       setCreator(data);
     } catch (err) {
       console.error('Failed to load creator', err);
-      setError('We could not find this creator. It may have been removed.');
+      setError(
+        formatSupabaseError(
+          err,
+          'We could not find this creator. It may have been removed or there was a connection problem.'
+        )
+      );
     } finally {
       setLoading(false);
     }

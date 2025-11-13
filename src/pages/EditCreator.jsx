@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../client.js';
+import { formatSupabaseError } from '../utils/formatSupabaseError.js';
 
 const initialState = {
   name: '',
@@ -50,7 +51,12 @@ const EditCreator = () => {
       });
     } catch (err) {
       console.error('Failed to load creator for edit', err);
-      setError('We could not load this creator. It may have been removed.');
+      setError(
+        formatSupabaseError(
+          err,
+          'We could not load this creator. It may have been removed or there was a connection problem.'
+        )
+      );
     } finally {
       setLoading(false);
     }
@@ -100,7 +106,12 @@ const EditCreator = () => {
       navigate(`/creator/${id}`);
     } catch (err) {
       console.error('Failed to update creator', err);
-      setError('Unable to update creator right now. Please try again.');
+      setError(
+        formatSupabaseError(
+          err,
+          'Unable to update creator right now. Please verify your connection and try again.'
+        )
+      );
     } finally {
       setSubmitting(false);
     }

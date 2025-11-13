@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../client.js';
+import { formatSupabaseError } from '../utils/formatSupabaseError.js';
 
 const initialState = {
   name: '',
@@ -53,7 +54,12 @@ const AddCreator = () => {
       navigate('/');
     } catch (err) {
       console.error('Failed to add creator', err);
-      setError('Unable to add creator right now. Please try again.');
+      setError(
+        formatSupabaseError(
+          err,
+          'Unable to add creator right now. Please verify your connection and try again.'
+        )
+      );
     } finally {
       setSubmitting(false);
     }

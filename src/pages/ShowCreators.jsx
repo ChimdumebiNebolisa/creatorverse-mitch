@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CreatorCard from '../components/CreatorCard.jsx';
 import { supabase } from '../client.js';
+import { formatSupabaseError } from '../utils/formatSupabaseError.js';
 
 const SAMPLE_CREATORS = [
   {
@@ -69,7 +70,12 @@ const ShowCreators = () => {
       setCreators(data ?? []);
     } catch (err) {
       console.error('Failed to fetch creators', err);
-      setError('We ran into an issue loading creators. Please try again.');
+      setError(
+        formatSupabaseError(
+          err,
+          'We ran into an issue loading creators. Please try again or refresh the page.'
+        )
+      );
     } finally {
       setLoading(false);
     }
@@ -86,7 +92,12 @@ const ShowCreators = () => {
       await fetchCreators({ allowSeed: false });
     } catch (err) {
       console.error('Failed to seed sample creators', err);
-      setError('Unable to seed sample creators. Add one manually to get started.');
+      setError(
+        formatSupabaseError(
+          err,
+          'Unable to seed sample creators automatically. Try adding one manually to get started.'
+        )
+      );
     } finally {
       setSeeding(false);
     }
@@ -120,7 +131,12 @@ const ShowCreators = () => {
       setCreators((prev) => prev.filter((creator) => creator.id !== id));
     } catch (err) {
       console.error('Failed to delete creator', err);
-      setError('We could not delete this creator. Please try again.');
+      setError(
+        formatSupabaseError(
+          err,
+          'We could not delete this creator. Please try again or refresh the page.'
+        )
+      );
     } finally {
       setPendingDeleteId(null);
     }
