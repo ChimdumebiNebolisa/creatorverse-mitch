@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import CreatorCard from '../components/CreatorCard.jsx';
-import { supabase } from '../../client.js';
+import { supabase } from '../client.js';
 
 const SAMPLE_CREATORS = [
   {
